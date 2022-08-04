@@ -25,7 +25,7 @@ export default function App() {
           <Stack.Screen options={{ headerShown: false }} name={'Disputa'} component={Disputa} />
           <Stack.Screen options={{
             headerShadowVisible: false,
-            title: '',
+            title: 'Abra sua Bíblia em...',
             headerStyle: {
               backgroundColor: '#B22',
 

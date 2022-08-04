@@ -7,6 +7,10 @@ export const AuthContext = createContext({})
 
 export function AuthProvider({ children }) {
 
+  const [loadingTreino, setLoadingTreino] = useState(false)
+  const [loadingOponente, setLoadingOponente] = useState(false)
+  const [versoTreino, setVersoTreino] = useState([])
+  const [versoOponente, setVersoOponente] = useState([])
   const [user, setUser] = useState({})
 
   useEffect(() => {
@@ -29,7 +33,7 @@ export function AuthProvider({ children }) {
     )
   }
 
- // esses dados tem que vir do Async Storage
+  // esses dados tem que vir do Async Storage
   async function HandleUser() {
     await api.put('/api/users/token',
       {
@@ -37,20 +41,56 @@ export function AuthProvider({ children }) {
         password: "hpB422354"
       }
     )
-    .then((response) => {
-      setUser(response.data);
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((err) => {
+      })
+  }
+
+  async function ListVersiculoTreino() {
+    setLoadingTreino(true)
+    await api.get('/api/verses/nvi/random', {
+      headers: {
+        Authorization: `Bearer ${user?.token}`
+      }
     })
-    .catch((err) => {
-      console.log('erro');
-      setUser(false)
+      .then((response) => {
+        setVersoTreino(response?.data)
+        setLoadingTreino(false)
+      })
+      .catch((err) => {
+        setLoadingTreino(false)
+      })
+  }
+
+  async function ListVersiculoOponente() {
+    setLoadingOponente(true)
+    await api.get('/api/verses/nvi/random', {
+      headers: {
+        Authorization: `Bearer ${user?.token}`
+      }
     })
+      .then((response) => {
+        setVersoOponente(response?.data)
+        setLoadingOponente(false)
+      })
+      .catch((err) => {
+        setLoadingOponente(false)
+      })
   }
 
 
   return (
     <AuthContext.Provider value={{
       user,
-      CreateUser
+      CreateUser,
+      loadingTreino,
+      loadingOponente,
+      ListVersiculoTreino,
+      ListVersiculoOponente,
+      versoTreino,
+      versoOponente
     }}>
       {children}
     </AuthContext.Provider>

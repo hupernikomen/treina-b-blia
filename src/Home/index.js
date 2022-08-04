@@ -10,7 +10,8 @@ export default function Home() {
   const navigation = useNavigation()
 
   useEffect(() => {
-    
+
+
   },[])
 
   return (
